@@ -2,44 +2,31 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity tb_FCS_Reg is
-end tb_FCS_Reg;
+entity tb_FCS is
+end tb_FCS;
 
-architecture behavior of tb_FCS_Reg is
+architecture behavior of tb_FCS is
 
   -- componant used in testbench
-  component FCS_Reg
-    	port (
-	      --Input
-	      Reset			    : in std_logic;
-        Tx_Clk     		: in std_logic;
-        Rx_Clk     		: in std_logic;
-        Rx_Valid		  : in std_logic;
-        RX_Data   		: in std_logic_vector(7 downto 0);
-        Done_In			  : in std_logic;
-        Dst_Port_in		: in std_logic_vector(3 downto 0);
-        --Output
-        Dst_Port_out		: out std_logic_vector(2 downto 0);
-        Data_out		: out std_logic_vector(7 downto 0);
-        Dst_Mac 		: out std_logic_vector(47 downto 0);
-        Src_Mac 		: out std_logic_vector(47 downto 0)  
-        );
+  component FCS
+    	port(
+	Reset			: in std_logic;
+    	Rx_Clk        		: in std_logic;
+	Rx_Valid		: in std_logic;
+	RX_Data   		: in std_logic_vector(7 downto 0);
+	FCS_Check		: in std_logic;
+	fcs_error		: out std_logic 
+
+	);
   end component;
 
   -- Signals
 	Signal test_Reset	: std_logic;
 	Signal test_Rx_Clk	: std_logic;
-	Signal test_Tx_Clk	: std_logic;
 	Signal test_Rx_Valid	: std_logic;
 	Signal test_RX_Data	: std_logic_vector(7 downto 0);
-  Signal test_Done_In	: std_logic;
-  Signal test_Dst_Port_in : std_logic_vector(3 downto 0);
-  
-  Signal test_Dst_Port_out : std_logic_vector(2 downto 0);
-  Signal test_Data_out : std_logic_vector(7 downto 0);
-  Signal test_Dst_Mac : std_logic_vector(47 downto 0);
-  Signal test_Src_Mac : std_logic_vector(47 downto 0);
-
+	Signal test_FCS_Check	: std_logic;
+	Signal test_fcs_error	: std_logic; 
 
  -- Constants
 	constant Preamble 	: std_logic_vector(55 downto 0) := x"AAAAAAAAAAAAAA";
@@ -51,23 +38,16 @@ architecture behavior of tb_FCS_Reg is
 
   -- Clock Speed
   constant clk_period_1 : time := 8 ns;
-  constant clk_period_2 : time := 8 ns;
 
   begin
 
     Comp1 : FCS port map (
-        Reset	      =>test_Reset,
-        Tx_Clk	    =>test_Tx_Clk,		
-        Rx_Clk      =>test_Rx_Clk,   		
-        Rx_Valid    =>test_Rx_Valid,  
-        RX_Data	    =>test_RX_Data,		  		
-        Done_In	    =>test_Done_In,		  
-        Dst_Port_in	=>test_Dst_Port_in,	
-        --Output
-        Dst_Port_out=>test_Dst_Port_out,		
-        Data_out    =>test_Data_out,
-        Dst_Mac     =>test_Dst_Mac,
-        Src_Mac     =>test_Src_Mac
+	Reset		=>test_Reset,
+	Rx_Clk		=>test_Rx_Clk,	
+	Rx_Valid	=>test_Rx_Valid,	
+	RX_Data		=>test_RX_Data,	
+	FCS_Check	=>test_FCS_Check,	
+	fcs_error	=>test_fcs_error	
     );
 
   -- Clock generation 1 
@@ -79,15 +59,6 @@ architecture behavior of tb_FCS_Reg is
     wait for clk_period_1/2;
   end process;
 
-  -- Clock generation 2 
-  Clk_Generator2 : process
-  begin
-    test_Tx_Clk <= '0';
-    wait for clk_period_2/2;
-    test_Tx_Clk <= '1';
-    wait for clk_period_2/2;
-  end process;
-
   -- Data_Simulation
   Data_Sim : process
   begin
@@ -97,8 +68,7 @@ architecture behavior of tb_FCS_Reg is
 	test_Reset	<= '1';
 	test_Rx_Valid	<= '0';
 	test_RX_Data	<= x"00";
-  test_Done_In   <= '0';
-  test_Dst_Port_in <= x"0";
+	test_FCS_Check	<= '0';
 	wait for clk_period_1; 
 	test_Reset<= '0';
 	wait for clk_period_1;

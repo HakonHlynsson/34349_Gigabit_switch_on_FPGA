@@ -1,9 +1,16 @@
+
 ---------------------------------------------------------------------
 -- Componant:   FCS 
 -- Description: its task is read and decode the incomming singnal
 --	        as well as chack if the correct FCS value has been achived		   
 -- Made by:    Hákon Hlynsson
 ---------------------------------------------------------------------
+
+
+---------------------------------------------------------------------
+-- Notes on the 
+
+-- Length / Type.
 
 
 library IEEE;
@@ -75,32 +82,12 @@ architecture behavioral of FCS is
 	);
 	end component;
 
-	component FIFO port (
-		--Input
-		aclr		: IN STD_LOGIC  := '0';
-		data		: IN STD_LOGIC_VECTOR (7 DOWNTO 0);
-		rdclk		: IN STD_LOGIC ;
-		rdreq		: IN STD_LOGIC ;
-		wrclk		: IN STD_LOGIC ;
-		wrreq		: IN STD_LOGIC ;
-		--Output
-		q			: OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-		rdempty		: OUT STD_LOGIC ;
-		rdusedw		: OUT STD_LOGIC_VECTOR (11 DOWNTO 0);
-		wrfull		: OUT STD_LOGIC ;
-		wrusedw		: OUT STD_LOGIC_VECTOR (11 DOWNTO 0)
-	);
-	end component;
-
-
-
-
 --sigbnal
 	Signal Dst_En		: std_logic;	
 	Signal Src_En		: std_logic;
 	Signal FCS_En		: std_logic;
 	Signal fcs_error	: std_logic;
-	signal Tx_Valid		: std_logic;
+
 
 
 
@@ -146,23 +133,6 @@ Comp1 : FCS_State_Machine port map (
 	--Output
 	Src_MAC =>Src_Mac
 	);
-
-	comp5 : FIFO port map (
-	--Input
-	aclr => Reset,
-	data => RX_Data,
-	rdclk => Tx_Clk,
-	rdreq => Tx_Valid,
-	wrclk => Rx_Clk,
-	wrreq => Rx_Valid,
-	--Output
-	q => Data_out,
-	rdempty => open,	
-	rdusedw => open,
-	wrfull => open,
-	wrusedw => open
-	);
-
 
 
 
