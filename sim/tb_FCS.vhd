@@ -10,14 +10,21 @@ architecture behavior of tb_FCS is
   -- componant used in testbench
   component FCS
     	port(
-	Reset			: in std_logic;
-    	Rx_Clk        		: in std_logic;
-	Rx_Valid		: in std_logic;
-	RX_Data   		: in std_logic_vector(7 downto 0);
-	FCS_Check		: in std_logic;
-	fcs_error		: out std_logic 
-
-	);
+        --Input
+        Reset			: in std_logic;
+        Tx_Clk     		: in std_logic;
+        Rx_Clk     		: in std_logic;
+        Rx_Valid		: in std_logic;
+        RX_Data   		: in std_logic_vector(7 downto 0);
+        Done_In			: in std_logic;
+        Dst_Port_in		: in std_logic_vector(3 downto 0);
+        --Output
+        Dst_Port_out	: out std_logic_vector(2 downto 0);
+        Data_out		: out std_logic_vector(7 downto 0);
+        Dst_Mac 		: out std_logic_vector(47 downto 0);
+        Src_Mac 		: out std_logic_vector(47 downto 0)
+        );
+	    
   end component;
 
   -- Signals
@@ -25,8 +32,17 @@ architecture behavior of tb_FCS is
 	Signal test_Rx_Clk	: std_logic;
 	Signal test_Rx_Valid	: std_logic;
 	Signal test_RX_Data	: std_logic_vector(7 downto 0);
-	Signal test_FCS_Check	: std_logic;
-	Signal test_fcs_error	: std_logic; 
+  Signal test_Done_In		:  std_logic;
+  Signal test_Dst_Port_in		:  std_logic_vector(3 downto 0);
+  Signal test_Dst_Port_out	:  std_logic_vector(2 downto 0);
+  Signal test_Data_out		:  std_logic_vector(7 downto 0);
+  Signal test_Dst_Mac 		:  std_logic_vector(47 downto 0);
+  Signal test_Src_Mac 		:  std_logic_vector(47 downto 0)
+
+
+
+
+	 
 
  -- Constants
 	constant Preamble 	: std_logic_vector(55 downto 0) := x"AAAAAAAAAAAAAA";
@@ -34,7 +50,7 @@ architecture behavior of tb_FCS is
 	constant Destination_MAC: std_logic_vector(47 downto 0) := x"000000000002";
 	constant Source_MAC	: std_logic_vector(47 downto 0) := x"000000000001";
 	constant Ethernetlength : std_logic_vector(15 downto 0) := x"002E";
-	constant FCS		: std_logic_vector(31 downto 0) := x"A3338135";
+	constant FCS_1		: std_logic_vector(31 downto 0) := x"A3338135";
 
   -- Clock Speed
   constant clk_period_1 : time := 8 ns;
@@ -113,7 +129,7 @@ architecture behavior of tb_FCS is
 
     -- 7. Send FCS (4 Bytes)
     -- Send the FIRST byte of the FCS and trigger the FCS_Check flag simultaneously
-    test_RX_Data   <= FCS(31 downto 24); 
+    test_RX_Data   <= FCS_1(31 downto 24); 
     test_FCS_Check <= '1';
     wait for clk_period_1;
     
@@ -122,7 +138,7 @@ architecture behavior of tb_FCS is
 
     -- Send the remaining 3 bytes of the FCS
     for i in 2 downto 0 loop
-        test_RX_Data <= FCS((i*8)+7 downto i*8);
+        test_RX_Data <= FCS_1((i*8)+7 downto i*8);
         wait for clk_period_1;
     end loop;
 
