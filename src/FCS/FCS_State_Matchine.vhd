@@ -96,15 +96,13 @@ begin
             
             when Destionation_MAC =>
                 Dst_En <= '1';
-                if Counter = 13 then 
-                    Dst_En <= '0'; 
+                if Counter = 13 then  
                     next_state <= Source_MAC;
                 end if;    
             
             when Source_MAC =>
                 Src_En <= '1';
                 if Counter = 19 then 
-                    Src_En <= '0'; 
                     next_state <= Ethernet_Length;
                 end if; 
 

@@ -11,12 +11,12 @@ architecture behavior of tb_FCS is
   component FCS
     	port(
         --Input
-        Reset			: in std_logic;
+        Reset			    : in std_logic;
         Tx_Clk     		: in std_logic;
         Rx_Clk     		: in std_logic;
-        Rx_Valid		: in std_logic;
+        Rx_Valid		  : in std_logic;
         RX_Data   		: in std_logic_vector(7 downto 0);
-        Done_In			: in std_logic;
+        Done_In			  : in std_logic;
         Dst_Port_in		: in std_logic_vector(3 downto 0);
         --Output
         Dst_Port_out	: out std_logic_vector(2 downto 0);
@@ -39,11 +39,6 @@ architecture behavior of tb_FCS is
   Signal test_Dst_Mac 		:  std_logic_vector(47 downto 0);
   Signal test_Src_Mac 		:  std_logic_vector(47 downto 0)
 
-
-
-
-	 
-
  -- Constants
 	constant Preamble 	: std_logic_vector(55 downto 0) := x"AAAAAAAAAAAAAA";
 	constant Start_of_Frame : std_logic_vector(7 downto 0)  := x"AB";	
@@ -54,16 +49,24 @@ architecture behavior of tb_FCS is
 
   -- Clock Speed
   constant clk_period_1 : time := 8 ns;
+  constant clk_period_2 : time := 8 ns;
 
   begin
 
     Comp1 : FCS port map (
-	Reset		=>test_Reset,
-	Rx_Clk		=>test_Rx_Clk,	
-	Rx_Valid	=>test_Rx_Valid,	
-	RX_Data		=>test_RX_Data,	
-	FCS_Check	=>test_FCS_Check,	
-	fcs_error	=>test_fcs_error	
+        --Input
+        Reset		=> test_Reset,
+        Tx_Clk		=> test_Tx_Clk,	
+        Rx_Clk      => test_Rx_Clk,
+        Rx_Valid	=> test_Rx_Valid,
+        RX_Data   	=> test_RX_Data,
+        Done_In		=> test_Done_In,
+        Dst_Port_in	=> test_Dst_Port_in,
+        --Output
+        Dst_Port_out=> test_Dst_Port_out,
+        Data_out	=> test_Data_out,
+        Dst_Mac 	=> test_Dst_Mac,
+        Src_Mac 	=> test_Src_Mac
     );
 
   -- Clock generation 1 
@@ -75,16 +78,23 @@ architecture behavior of tb_FCS is
     wait for clk_period_1/2;
   end process;
 
+   Clk_Generator2 : process
+  begin
+    test_Tx_Clk <= '0';
+    wait for clk_period_2/2;
+    test_Tx_Clk <= '1';
+    wait for clk_period_2/2;
+  end process;
+
   -- Data_Simulation
   Data_Sim : process
   begin
-  
+
   -- Start by inserting data
 	wait for clk_period_1;   	
 	test_Reset	<= '1';
 	test_Rx_Valid	<= '0';
 	test_RX_Data	<= x"00";
-	test_FCS_Check	<= '0';
 	wait for clk_period_1; 
 	test_Reset<= '0';
 	wait for clk_period_1;
