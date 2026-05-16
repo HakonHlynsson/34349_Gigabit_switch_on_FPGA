@@ -5,12 +5,13 @@
 -- Description: This is the toplayer where all the sub-componants   
 -- 		 are cornected.
 -- Changes	:
---  		HH 18/3 creation of document and I/O
+--  		Hakon & Mikkel
 ---------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
+use work.MAC_PKG.all;   
 
 entity Top_Layer is
     port (
@@ -65,12 +66,12 @@ component FCS port (
 	);  
 end component;
 
-component Mac_Top port (
+component MAC_TOP port (
 	
         
     -- Inputs
 	clk      		: in  std_logic;
-    reset      		: in  std_logic;
+    reset      			: in  std_logic;
     EN 				: in t_flag_array;
     dstMac 			: in t_mac_array;
     srcMac 			: in t_mac_array;
@@ -124,15 +125,19 @@ Signal Src_Mac_2 : std_logic_vector(47 downto 0);
 Signal Src_Mac_3 : std_logic_vector(47 downto 0);
 Signal Src_Mac_4 : std_logic_vector(47 downto 0);
 
-
-
+-- MAC_Top
+Signal mac_en_in        : t_flag_array;
+Signal mac_dst_mac_in   : t_mac_array;
+Signal mac_src_mac_in   : t_mac_array;
+Signal mac_dst_port_out : t_port_array;
+Signal mac_done_out     : t_flag_array;
 
 
 Begin
 
 
 
-FCS1: FCS_State_Machine port map(
+FCS1: FCS port map(
 	Reset=>Reset,
 	Tx_Clk=>TxClk_Int,
     Rx_Clk=>Rx_Clk_1,
@@ -149,7 +154,7 @@ FCS1: FCS_State_Machine port map(
 	Src_Mac=>Src_Mac_1
 );
 
-FCS2: FCS_State_Machine port map(
+FCS2: FCS port map(
 	Reset=>Reset,
 	Tx_Clk=>TxClk_Int,
     Rx_Clk=>Rx_Clk_2,
@@ -166,7 +171,7 @@ FCS2: FCS_State_Machine port map(
 	Src_Mac=>Src_Mac_2
 );
 
-FCS3: FCS_State_Machine port map(
+FCS3: FCS port map(
 	Reset=>Reset,
 	Tx_Clk=>TxClk_Int,
     Rx_Clk=>Rx_Clk_3,
@@ -183,7 +188,7 @@ FCS3: FCS_State_Machine port map(
 	Src_Mac=>Src_Mac_3
 );
 
-FCS4: FCS_State_Machine port map(
+FCS4: FCS port map(
 	Reset=>Reset,
 	Tx_Clk=>TxClk_Int,
     Rx_Clk=>Rx_Clk_4,
@@ -200,7 +205,7 @@ FCS4: FCS_State_Machine port map(
 	Src_Mac=>Src_Mac_4
 );
 
-Mac_Top: Mac_Top port map(
+Mac_Top: MAC_TOP port map(
 	clk=>TxClk_Int,-- use TX cllk
 	reset=>Reset,
 	EN=>(En_Mac_1, En_Mac_2, En_Mac_3, En_Mac_4),
