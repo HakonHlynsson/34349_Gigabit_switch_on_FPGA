@@ -30,7 +30,7 @@ entity Top_Layer is
         Rx_Clk_4        : in std_logic;
         Rx_Valid_4   	: in std_logic;
 	
-	--Output
+		--Output
 		Tx_Clk        	: out std_logic;
 		Tx_Data_1       : out std_logic_vector(7 downto 0);
     	Tx_Valid_1   	: out std_logic;
