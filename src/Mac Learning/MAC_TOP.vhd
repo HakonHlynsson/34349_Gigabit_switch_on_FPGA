@@ -11,21 +11,47 @@ entity MAC_TOP is
         clk      : in  std_logic;
         reset      : in  std_logic;
         
-        -- Inputs
-        EN : in t_flag_array;
-        dstMac : in t_mac_array;
-        srcMac : in t_mac_array;
-        
-        -- Outputs
-        dstPort : out t_port_array;
-        done : out t_flag_array
-         
+        -- Port 0
+        port0_EN      : in  std_logic;
+        port0_dstMac  : in  std_logic_vector(47 downto 0);
+        port0_srcMac  : in  std_logic_vector(47 downto 0);
+        port0_dstPort : out std_logic_vector(2 downto 0);
+        port0_done    : out std_logic;
+
+        -- Port 1
+        port1_EN      : in  std_logic;
+        port1_dstMac  : in  std_logic_vector(47 downto 0);
+        port1_srcMac  : in  std_logic_vector(47 downto 0);
+        port1_dstPort : out std_logic_vector(2 downto 0);
+        port1_done    : out std_logic;
+
+        -- Port 2
+        port2_EN      : in  std_logic;
+        port2_dstMac  : in  std_logic_vector(47 downto 0);
+        port2_srcMac  : in  std_logic_vector(47 downto 0);
+        port2_dstPort : out std_logic_vector(2 downto 0);
+        port2_done    : out std_logic;
+
+        -- Port 3
+        port3_EN      : in  std_logic;
+        port3_dstMac  : in  std_logic_vector(47 downto 0);
+        port3_srcMac  : in  std_logic_vector(47 downto 0);
+        port3_dstPort : out std_logic_vector(2 downto 0);
+        port3_done    : out std_logic
     );
 end entity MAC_TOP;
 
 architecture Behavioral of MAC_TOP is
 
     -- Internal signal declarations
+    signal sig_EN : t_flag_array;
+    signal sig_dstMac : t_mac_array;
+    signal sig_srcMac : t_mac_array;
+    
+    -- Outputs
+    signal sig_dstPort : t_port_array;
+    signal sig_done : t_flag_array;
+
     
     -- Aribter - Engine signals
     signal sig_engine_EN : std_logic;
@@ -59,6 +85,31 @@ architecture Behavioral of MAC_TOP is
 
 begin
 
+    sig_EN(0) <= port0_EN;
+    sig_EN(1) <= port1_EN;
+    sig_EN(2) <= port2_EN;
+    sig_EN(3) <= port3_EN;
+
+    sig_dstMac(0) <= port0_dstMac;
+    sig_dstMac(1) <= port1_dstMac;
+    sig_dstMac(2) <= port2_dstMac;
+    sig_dstMac(3) <= port3_dstMac;
+
+    sig_srcMac(0) <= port0_srcMac;
+    sig_srcMac(1) <= port1_srcMac;
+    sig_srcMac(2) <= port2_srcMac;
+    sig_srcMac(3) <= port3_srcMac;
+
+    port0_dstPort <= sig_dstPort(0);
+    port1_dstPort <= sig_dstPort(1);
+    port2_dstPort <= sig_dstPort(2);
+    port3_dstPort <= sig_dstPort(3);
+
+    port0_done <= sig_done(0);
+    port1_done <= sig_done(1);
+    port2_done <= sig_done(2);
+    port3_done <= sig_done(3);
+
     -- BRAM Address multiplexers
     sig_bram_addr_A <= sig_wrAddr_A when sig_wren_A = '1' else sig_rdAddr_A;
     sig_bram_addr_B <= sig_wrAddr_B when sig_wren_B = '1' else sig_rdAddr_B;
@@ -68,17 +119,17 @@ begin
             clk             => clk,
             reset           => reset,
 
-            port_EN         => EN,
-            port_dstMac     => dstMac,
-            port_srcMac     => srcMac,
+            port_EN         => sig_EN,
+            port_dstMac     => sig_dstMac,
+            port_srcMac     => sig_srcMac,
 
             engine_srcPortIn => sig_engine_srcPortOut,
 
             engine_dstPort  => sig_engine_dstPort,
             engine_done     => sig_engine_done,
 
-            port_dstPort    => dstPort,
-            port_done       => done,
+            port_dstPort    => sig_dstPort,
+            port_done       => sig_done,
             engine_dstMac   => sig_engine_dstMac,
             engine_srcMac   => sig_engine_srcMac,
 

@@ -1,0 +1,54 @@
+m255
+K4
+z2
+!s11e MIXED_VERSIONS
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/mikke/OneDrive/Skrivebord/FPGA-kommunikation/Projekt_git/34349_Gigabit_switch_on_FPGA/src
+Etop_layer
+Z1 w1778957401
+Z2 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+!i122 1
+R0
+Z5 8C:/Users/mikke/OneDrive/Skrivebord/FPGA-kommunikation/Projekt_git/34349_Gigabit_switch_on_FPGA/src/Top_Layer.vhd
+Z6 FC:/Users/mikke/OneDrive/Skrivebord/FPGA-kommunikation/Projekt_git/34349_Gigabit_switch_on_FPGA/src/Top_Layer.vhd
+l0
+L15 1
+VFmTcf;0Dll7h89WZ2@]4J1
+!s100 ZbjGhBCQ1<`XmiJm8l5J83
+Z7 OV;C;2020.1;71
+32
+Z8 !s110 1778957415
+!i10b 1
+Z9 !s108 1778957415.000000
+Z10 !s90 -reportprogress|300|-work|work|C:/Users/mikke/OneDrive/Skrivebord/FPGA-kommunikation/Projekt_git/34349_Gigabit_switch_on_FPGA/src/Top_Layer.vhd|
+!s107 C:/Users/mikke/OneDrive/Skrivebord/FPGA-kommunikation/Projekt_git/34349_Gigabit_switch_on_FPGA/src/Top_Layer.vhd|
+!i113 1
+Z11 o-work work
+Z12 tExplicit 1 CvgOpt 0
+Abehavioral
+R2
+R3
+R4
+DEx4 work 9 top_layer 0 22 FmTcf;0Dll7h89WZ2@]4J1
+!i122 1
+l153
+L45 210
+VP8NbHm3z4c:ZVkPR?_^H>0
+!s100 Ne86RWcIjioWO=gPMM[hN3
+R7
+32
+R8
+!i10b 1
+R9
+R10
+Z13 !s107 C:/Users/mikke/OneDrive/Skrivebord/FPGA-kommunikation/Projekt_git/34349_Gigabit_switch_on_FPGA/src/Top_Layer.vhd|
+!i113 1
+R11
+R12
