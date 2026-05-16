@@ -11,7 +11,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
-use work.MAC_PKG.all;   
 
 entity Top_Layer is
     port (
@@ -67,18 +66,36 @@ component FCS port (
 end component;
 
 component MAC_TOP port (
+    clk      : in  std_logic;
+	reset      : in  std_logic;
 	
-        
-    -- Inputs
-	clk      		: in  std_logic;
-    reset      			: in  std_logic;
-    EN 				: in t_flag_array;
-    dstMac 			: in t_mac_array;
-    srcMac 			: in t_mac_array;
-        
-    -- Outputs
-    dstPort 		: out t_port_array;
-    done 			: out t_flag_array
+	-- Port 0
+	port0_EN      : in  std_logic;
+	port0_dstMac  : in  std_logic_vector(47 downto 0);
+	port0_srcMac  : in  std_logic_vector(47 downto 0);
+	port0_dstPort : out std_logic_vector(2 downto 0);
+	port0_done    : out std_logic;
+
+	-- Port 1
+	port1_EN      : in  std_logic;
+	port1_dstMac  : in  std_logic_vector(47 downto 0);
+	port1_srcMac  : in  std_logic_vector(47 downto 0);
+	port1_dstPort : out std_logic_vector(2 downto 0);
+	port1_done    : out std_logic;
+
+	-- Port 2
+	port2_EN      : in  std_logic;
+	port2_dstMac  : in  std_logic_vector(47 downto 0);
+	port2_srcMac  : in  std_logic_vector(47 downto 0);
+	port2_dstPort : out std_logic_vector(2 downto 0);
+	port2_done    : out std_logic;
+
+	-- Port 3
+	port3_EN      : in  std_logic;
+	port3_dstMac  : in  std_logic_vector(47 downto 0);
+	port3_srcMac  : in  std_logic_vector(47 downto 0);
+	port3_dstPort : out std_logic_vector(2 downto 0);
+	port3_done    : out std_logic
 );
 end component;
 
@@ -126,11 +143,11 @@ Signal Src_Mac_3 : std_logic_vector(47 downto 0);
 Signal Src_Mac_4 : std_logic_vector(47 downto 0);
 
 -- MAC_Top
-Signal mac_en_in        : t_flag_array;
-Signal mac_dst_mac_in   : t_mac_array;
-Signal mac_src_mac_in   : t_mac_array;
-Signal mac_dst_port_out : t_port_array;
-Signal mac_done_out     : t_flag_array;
+--Signal mac_en_in        : t_flag_array;
+--Signal mac_dst_mac_in   : t_mac_array;
+--Signal mac_src_mac_in   : t_mac_array;
+--Signal mac_dst_port_out : t_port_array;
+--Signal mac_done_out     : t_flag_array;
 
 
 Begin
@@ -205,14 +222,33 @@ FCS4: FCS port map(
 	Src_Mac=>Src_Mac_4
 );
 
-Mac_Top: MAC_TOP port map(
+Mac_Top1: MAC_TOP port map(
 	clk=>TxClk_Int,-- use TX cllk
 	reset=>Reset,
-	EN=>(En_Mac_1, En_Mac_2, En_Mac_3, En_Mac_4),
-	dstMac=>(Dst_Mac_1, Dst_Mac_2, Dst_Mac_3, Dst_Mac_4),
-	srcMac=>(Src_Mac_1, Src_Mac_2, Src_Mac_3, Src_Mac_4),
-	dstPort=>(Dst_Port_in_1, Dst_Port_in_2, Dst_Port_in_3, Dst_Port_in_4),
-	done=>(En_Port_in_1, En_Port_in_2, En_Port_in_3, En_Port_in_4)
+
+	port0_EN => En_Mac_1,
+	port0_dstMac => Dst_Mac_1,
+	port0_srcMac => Src_Mac_1,
+	port0_dstPort => Dst_Port_in_1,
+	port0_done => En_Port_in_1,
+
+	port1_EN => En_Mac_2,
+	port1_dstMac => Dst_Mac_2,
+	port1_srcMac => Src_Mac_2,
+	port1_dstPort => Dst_Port_in_2,
+	port1_done => En_Port_in_2,
+
+	port2_EN => En_Mac_3,
+	port2_dstMac => Dst_Mac_3,
+	port2_srcMac => Src_Mac_3,
+	port2_dstPort => Dst_Port_in_3,
+	port2_done => En_Port_in_3,
+
+	port3_EN => En_Mac_4,
+	port3_dstMac => Dst_Mac_4,
+	port3_srcMac => Src_Mac_4,
+	port3_dstPort => Dst_Port_in_4,
+	port3_done => En_Port_in_4
 );
 
 end behavioral;
