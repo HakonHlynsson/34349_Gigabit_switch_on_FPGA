@@ -15,12 +15,12 @@ entity FCS_Reg is
 
 	--Input
 	Reset			: in std_logic;
-    Rx_Clk     		: in std_logic;
+    	Rx_Clk     		: in std_logic;
 	Rx_Valid		: in std_logic;
 	RX_Data   		: in std_logic_vector(7 downto 0);
 	FCS_Check		: in std_logic; -- goes high when ever the next 32 bits are the FCS value
 	--Output
-    En_Mac          : out std_logic;-- goes high if FCS value is correct, and only for one cycle 
+    	En_Mac          : out std_logic -- goes high if FCS value is correct, and only for one cycle 
 
 	);
 end FCS_Reg;

@@ -17,6 +17,7 @@ entity FCS_State_Machine is
         Rx_Data         : in    std_logic_vector(7 downto 0);  -- incoming data
         Rx_Valid        : in    std_logic;  -- indicates that the incoming data is valid
         -- Output
+	Package_Length	: out  	std_logic_vector(10 downto 0);-- packahe length
         Dst_En          : out   std_logic;  -- enables the destination MAC address register
         Src_En          : out   std_logic;  -- enables the source MAC address register
         FCS_En          : out   std_logic  -- enables the FCS register
@@ -112,6 +113,7 @@ begin
                 elsif Counter = 21 then 
                     Payload_Length(7 downto 0) <= unsigned(Rx_Data(7 downto 0));
                     next_state <= Payload;
+		    Package_Length <= std_logic_vector(Payload_Length + 18);
                 end if;
 
             when Payload =>  
@@ -120,9 +122,11 @@ begin
                 end if;
 
             when FCS =>
-                FCS_En <= '1';  
+                if Counter = (22 + Payload_Length) then
+                    FCS_En <= '1';
+                end if;
+
                 if Counter = (25 + Payload_Length) then
-                    FCS_En <= '0';
                     next_state <= Dummy;
                 end if;
 

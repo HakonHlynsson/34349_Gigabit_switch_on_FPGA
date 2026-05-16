@@ -15,6 +15,7 @@ architecture behavior of tb_Port_Logic is
 	Tx_Clk     		: in std_logic;
 	En_Port_in		: in std_logic;
 	Dst_Port_in		: in std_logic_vector(2 downto 0);
+	Package_Length 		: in  std_logic_vector(10 downto 0);
 	--Output
 	En_Data_out		: out std_logic;
 	Dst_Port_out		: out std_logic_vector(2 downto 0)
@@ -22,16 +23,17 @@ architecture behavior of tb_Port_Logic is
   end component;
 
   -- Signals
-	Signal test_Reset	: std_logic;
-	Signal test_Tx_Clk	: std_logic;
-	Signal test_En_Port_in	: std_logic;
-	Signal test_Dst_Port_in	: std_logic_vector(2 downto 0);
-	Signal test_En_Port_out	: std_logic;
-	Signal test_Dst_Port_out: std_logic_vector(2 downto 0);
+	Signal test_Reset		: std_logic;
+	Signal test_Tx_Clk		: std_logic;
+	Signal test_En_Port_in		: std_logic;
+	Signal test_Dst_Port_in		: std_logic_vector(2 downto 0);
+	Signal test_Package_Length	: std_logic_vector(10 downto 0);
+	Signal test_En_Port_out		: std_logic;
+	Signal test_Dst_Port_out	: std_logic_vector(2 downto 0);
  
 
   -- Clock Speed
-  constant clk_period_1 : time := 8 ns;
+  constant clk_period_1 : time := 3 ns;
 
   begin
 
@@ -39,7 +41,8 @@ architecture behavior of tb_Port_Logic is
 	Reset		=>test_Reset,
 	Tx_Clk		=>test_Tx_Clk,	
 	En_Port_in	=>test_En_Port_in,	
-	Dst_Port_in	=>test_Dst_Port_in,	
+	Dst_Port_in	=>test_Dst_Port_in,
+	Package_Length 	=>test_Package_Length,-- from "000 0100 0000" to "101 1110 1110"	
 	En_Data_out	=>test_En_Port_out,	
 	Dst_Port_out	=>test_Dst_Port_out	
     );
@@ -60,18 +63,25 @@ architecture behavior of tb_Port_Logic is
 	wait for clk_period_1;   	
 	test_Reset	<= '1';
 	test_En_Port_in	<= '0';
+	test_Package_Length<="00000000000"; 
 	test_Dst_Port_in<= "000";
 	wait for clk_period_1; 
 	test_Reset<= '0';
 	wait for clk_period_1;
 	test_En_Port_in	<= '1';
 	test_Dst_Port_in<= "001";
-	wait for clk_period_1*5;
+	test_Package_Length<="00001000000"; 
+	wait for clk_period_1;
 	test_En_Port_in	<= '0';
+	wait for clk_period_1*54;
+	test_En_Port_in	<= '1';
+	test_Dst_Port_in<= "010";
+	test_Package_Length<="00001000000";
+	wait for clk_period_1;
+	test_En_Port_in	<= '0';
+	wait for clk_period_1*74; 
 	
-
     wait;
   end process;
 
 end;
-

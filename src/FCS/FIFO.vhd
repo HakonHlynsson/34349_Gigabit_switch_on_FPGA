@@ -193,4 +193,3 @@ END SYN;
 -- Retrieval info: LIB_FILE: altera_mf
 
 
-
