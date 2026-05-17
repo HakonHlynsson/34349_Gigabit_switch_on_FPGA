@@ -1,10 +1,8 @@
-
-
 ---------------------------------------------------------------------
 -- Componant:   Top_Layer 
 -- Description: This is the toplayer where all the sub-componants   
 -- 		 are cornected.
--- Changes	:
+-- Made by	:
 --  		Hakon & Mikkel
 ---------------------------------------------------------------------
 

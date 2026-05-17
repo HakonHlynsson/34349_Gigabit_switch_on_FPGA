@@ -44,11 +44,11 @@ architecture behavioral of Top_Crossbar is
             En_Port_2   : in  std_logic;
             En_Port_3   : in  std_logic;
             En_Port_4   : in  std_logic;
-            Select_S    : out std_logic_vector(7 downto 0)
+            Select_S    : out std_logic_vector(3 downto 0)-- select the port the 
         );
     end component;
 
-    component mux_4to1 port (
+    component FIFO_And_Crossbar port (
             Select_S    : in  std_logic_vector(7 downto 0);
             Port1_in    : in  std_logic_vector(7 downto 0);
             Port2_in    : in  std_logic_vector(7 downto 0);
