@@ -36,7 +36,7 @@ end entity MAC_ENGINE;
 architecture Behavioral of MAC_ENGINE is
 
     -- Internal signal, type, and constant declarations
-    type t_state is (IDLE, READ_SRC, WAIT_SRC_1, WAIT_SRC_2, CHECK_SRC, WRITE_SRC, READ_DST, WAIT_DST_1, WAIT_DST_2, CHECK_DST, WRITE_DST);
+    type t_state is (IDLE, WAIT_SRC_1, WAIT_SRC_2, CHECK_SRC, READ_DST, WAIT_DST_1, WAIT_DST_2, CHECK_DST);
 
     signal currentState : t_state := IDLE;
 
@@ -82,7 +82,7 @@ begin
                 case currentState is
                     when IDLE =>
                         if EN = '1' then
-                            currentState <= READ_SRC;
+                            currentState <= WAIT_SRC_1;
                             reg_dstMac <= dstMac;
                             reg_srcMac <= srcMac;
                             reg_srcPort <= srcPortIn;
@@ -90,24 +90,21 @@ begin
 
                             hash_dstMac <= calc_hash(dstMac);
                             hash_srcMac <= calc_hash(srcMac);
+
+                            rden <= '1';
+                            rdAddr <= calc_hash(srcMac);
                         else
                             currentState <= IDLE;
                         end if;
 
-                    when READ_SRC =>
-                        currentState <= WAIT_SRC_1;
-                        
-                        rden <= '1';
-                        rdAddr <= hash_srcMac;
-
                     when WAIT_SRC_1 =>
                         currentState <= WAIT_SRC_2;
 
-		    when WAIT_SRC_2 =>
-			currentState <= CHECK_SRC;
+		            when WAIT_SRC_2 =>
+			            currentState <= CHECK_SRC;
 
                     when CHECK_SRC =>
-                        currentState <= WRITE_SRC;
+                        currentState <= READ_DST;
 
                         v_row := unpack_bram_row(rdData);
                         v_found := false;
@@ -144,13 +141,8 @@ begin
                             v_row(v_slot_id).accessed := '1';
                         end if;
 
-                        wrData <= pack_bram_row(v_row);    
-
-                    when WRITE_SRC =>
-                        currentState <= READ_DST;
-
                         -- Write to BRAM
-
+                        wrData <= pack_bram_row(v_row);    
                         wrAddr <= hash_srcMac;
                         wren <= '1';
 
@@ -163,11 +155,11 @@ begin
                     when WAIT_DST_1 =>
                         currentState <= WAIT_DST_2;
 
-		    when WAIT_DST_2 =>
-			currentState <= CHECK_DST;
+		            when WAIT_DST_2 =>
+			            currentState <= CHECK_DST;
 
                     when CHECK_DST =>
-                        currentState <= WRITE_DST;
+                        currentState <= IDLE;
 
                         v_row := unpack_bram_row(rdData);
                         v_found := false;
@@ -188,12 +180,8 @@ begin
                             dstPort <= "111";
                         end if;
 
-                        wrData <= pack_bram_row(v_row);
-
-                    when WRITE_DST =>
-                        currentState <= IDLE;
-
                         -- Write to BRAM
+                        wrData <= pack_bram_row(v_row);
                         wrAddr <= hash_dstMac;
                         wren <= '1';
 

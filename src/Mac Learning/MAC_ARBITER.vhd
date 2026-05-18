@@ -35,7 +35,7 @@ architecture Behavioral of MAC_ARBITER is
 
     signal token : unsigned(1 downto 0) := "00";
 
-    type t_state is (SCANNING, GRANTED, WAITING_FOR_ENGINE);
+    type t_state is (SCANNING, WAITING_FOR_ENGINE);
     signal currentState : t_state := SCANNING;
 
 begin
@@ -68,17 +68,15 @@ begin
                 case currentState is
                     when SCANNING =>
                         if hold_EN(to_integer(token)) = '1' then
-                            currentState <= GRANTED;
+                            currentState <= WAITING_FOR_ENGINE;
+                            engine_EN <= '1';
+                            engine_dstMac <= hold_dstMac(to_integer(token));
+                            engine_srcMac <= hold_srcMac(to_integer(token));
+                            engine_srcPortOut <= "0" & std_logic_vector(token);
                         else
                             token <= token + 1;
                         end if; 
-                    when GRANTED =>
-                        currentState <= WAITING_FOR_ENGINE;
-
-                        engine_EN <= '1';
-                        engine_dstMac <= hold_dstMac(to_integer(token));
-                        engine_srcMac <= hold_srcMac(to_integer(token));
-                        engine_srcPortOut <= "0" & std_logic_vector(token);
+                        
                     when WAITING_FOR_ENGINE =>
                         if engine_done = '1' then
                             currentState <= SCANNING;
