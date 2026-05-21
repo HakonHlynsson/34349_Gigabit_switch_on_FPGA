@@ -16,12 +16,14 @@ entity Source_Reg is
         Rx_Data        	: in std_logic_vector(7 downto 0);
         Rx_Clk         	: in std_logic;
         Src_En   	: in std_logic;
+	En_Out		: in std_logic;
 	--Output
         Src_MAC        	: out std_logic_vector(47 downto 0)
     );
 end Source_Reg;
 
 architecture behavioral of Source_Reg is
+
 -- Signal & Component Declaration
 Signal Reg	: std_logic_vector(47 downto 0):=(others => '0');
 Signal count 	: unsigned(2 downto 0) := "101";
@@ -36,17 +38,13 @@ process(Rx_Clk)
 				count 	<= count - 1;
 			else 
 				count	<= "101";		
-			end if;
+			end if;	
+
+			if (En_Out ='1') then 
+				Src_MAC <= Reg;
+			end if;	
 		end if;
 end process;
-Src_MAC <= Reg;
+
 
 end behavioral;
-
-
-
-
-
-
-
-

@@ -2,13 +2,13 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity tb_Top_Layer is
-end tb_Top_Layer;
+entity tb_FCS_And_MAC is
+end tb_FCS_And_MAC;
 
-architecture behavior of tb_Top_Layer is
+architecture behavior of tb_FCS_And_MAC is
 
   -- componant used in testbench
-  component FCS
+  component FCS_And_MAC
     	port (
 	      --Input
         Reset          	: in std_logic;
@@ -26,15 +26,21 @@ architecture behavior of tb_Top_Layer is
         Rx_Valid_4   	  : in std_logic;
 	
 		    --Output
-		    Tx_Clk        	: out std_logic;
-		    Tx_Data_1       : out std_logic_vector(7 downto 0);
-    	  Tx_Valid_1   	  : out std_logic;
-		    Tx_Data_2       : out std_logic_vector(7 downto 0);
-   	 	  Tx_Valid_2   	  : out std_logic;
-		    Tx_Data_3       : out std_logic_vector(7 downto 0);
-    	  Tx_Valid_3    	: out std_logic;
-		    Tx_Data_4       : out std_logic_vector(7 downto 0);
-    	  Tx_Valid_4    	: out std_logic
+		      Tx_Clk        : out std_logic;
+
+        En_Data_out_1	  : out std_logic; 			
+        Dst_Port_out_1	: out std_logic_vector(2 downto 0);	
+        Data_out_1		  : out std_logic_vector(7 downto 0);	
+        En_Data_out_2	  : out std_logic; 			
+        Dst_Port_out_2	: out std_logic_vector(2 downto 0);	
+        Data_out_2		  : out std_logic_vector(7 downto 0);	
+        En_Data_out_3	  : out std_logic; 			
+        Dst_Port_out_3	: out std_logic_vector(2 downto 0);	
+        Data_out_3		  : out std_logic_vector(7 downto 0);	
+        En_Data_out_4	  : out std_logic; 			
+        Dst_Port_out_4	: out std_logic_vector(2 downto 0);	
+        Data_out_4		  : out std_logic_vector(7 downto 0);	
+
     );
 	    
   end component;
@@ -54,15 +60,20 @@ architecture behavior of tb_Top_Layer is
   Signal test_Rx_Clk_4	: std_logic;
   Signal test_Rx_Valid_4: std_logic;
   
-  Signal test_Tx_Clk	  : std_logic;
-  Signal test_Tx_Data_1	: std_logic_vector(7 downto 0);
-  Signal test_Tx_Valid_1: std_logic;
-  Signal test_Tx_Data_2	: std_logic_vector(7 downto 0);
-  Signal test_Tx_Valid_2: std_logic;
-  Signal test_Tx_Data_3	: std_logic_vector(7 downto 0);
-  Signal test_Tx_Valid_3: std_logic;
-  Signal test_Tx_Data_4	: std_logic_vector(7 downto 0);
-  Signal test_Tx_Valid_4: std_logic;
+  Signal test_Tx_Clk     : std_logic;
+  Signal test_En_Data_out_1	  :  std_logic; 			
+  Signal test_Dst_Port_out_1	:  std_logic_vector(2 downto 0);	
+  Signal test_Data_out_1		  : std_logic_vector(7 downto 0);	
+  Signal test_En_Data_out_2	  :  std_logic; 			
+  Signal test_Dst_Port_out_2	:  std_logic_vector(2 downto 0);	
+  Signal test_Data_out_2		  : std_logic_vector(7 downto 0);	
+  Signal test_En_Data_out_3	  :  std_logic; 			
+  Signal test_Dst_Port_out_3	:  std_logic_vector(2 downto 0);	
+  Signal test_Data_out_3		  : std_logic_vector(7 downto 0);	
+  Signal test_En_Data_out_4	  :  std_logic; 			
+  Signal test_Dst_Port_out_4	:  std_logic_vector(2 downto 0);	
+  Signal test_Data_out_4		  :  std_logic_vector(7 downto 0);
+
 
  -- Constants
 	constant Preamble 	: std_logic_vector(55 downto 0) := x"AAAAAAAAAAAAAA";
@@ -78,7 +89,7 @@ architecture behavior of tb_Top_Layer is
 
   begin
 
-    Comp1 : Top_Layer port map (
+    Comp1 : FCS_And_MAC port map (
         --Input
         Reset		=> test_Reset,
         Rx_Data_1   => test_Rx_Data_1,
@@ -96,14 +107,18 @@ architecture behavior of tb_Top_Layer is
 
         --Output
         Tx_Clk      => test_Tx_Clk,
-        Tx_Data_1   => test_Tx_Data_1,
-        Tx_Valid_1  => test_Tx_Valid_1,
-        Tx_Data_2   => test_Tx_Data_2,
-        Tx_Valid_2  => test_Tx_Valid_2,
-        Tx_Data_3   => test_Tx_Data_3,
-        Tx_Valid_3  => test_Tx_Valid_3, 
-        Tx_Data_4   => test_Tx_Data_4,
-        Tx_Valid_4  => test_Tx_Valid_4
+        En_Data_out_1	=> test_En_Data_out_1,
+        Dst_Port_out_1	=> test_Dst_Port_out_1,
+        Data_out_1		=> test_Data_out_1,
+        En_Data_out_2	=> test_En_Data_out_2,
+        Dst_Port_out_2	=> test_Dst_Port_out_2,
+        Data_out_2		=> test_Data_out_2,
+        En_Data_out_3	=> test_En_Data_out_3,
+        Dst_Port_out_3	=> test_Dst_Port_out_3,
+        Data_out_3		=> test_Data_out_3,
+        En_Data_out_4	=> test_En_Data_out_4,
+        Dst_Port_out_4	=> test_Dst_Port_out_4,
+        Data_out_4		=> test_Data_out_4
     );
 
   -- Clock generation 1 

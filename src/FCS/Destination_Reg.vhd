@@ -1,5 +1,3 @@
-
-
 ---------------------------------------------------------------------
 -- Componant:   Destination_Reg
 -- Description: Stores the Destination in a register (assume MSB first)
@@ -18,7 +16,8 @@ entity Destination_Reg is
 	--Input
         Rx_Data        	: in std_logic_vector(7 downto 0);
         Rx_Clk         	: in std_logic;
-        Dst_En   	: in std_logic;
+        Dst_En   		: in std_logic;
+	En_Out			: in std_logic;
 	--Output
         Dst_MAC        	: out std_logic_vector(47 downto 0)
     );
@@ -26,7 +25,7 @@ end Destination_Reg;
 
 architecture behavioral of Destination_Reg is
 -- Signal & Component Declaration
-Signal Reg	: std_logic_vector(47 downto 0):=(others => '0');
+Signal Reg		: std_logic_vector(47 downto 0):=(others => '0');
 Signal count 	: unsigned(2 downto 0) := "101";
 
 Begin
@@ -40,13 +39,12 @@ process(Rx_Clk)
 			else 
 				count	<= "101";		
 			end if;
+			
+			if (En_Out = '1') then
+				Dst_MAC <= Reg;
+			end if;
+
 		end if;
 end process;
-Dst_MAC <= Reg;
 
 end behavioral;
-
-
-
-
-

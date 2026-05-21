@@ -11,16 +11,17 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity FCS_State_Machine is
     port (
-        -- Input 
-        Reset           : in    std_logic;  -- reset signal
-        Rx_Clk          : in    std_logic;  -- clock signal for receiving data
-        Rx_Data         : in    std_logic_vector(7 downto 0);  -- incoming data
-        Rx_Valid        : in    std_logic;  -- indicates that the incoming data is valid
-        -- Output
-	Package_Length	: out  	std_logic_vector(10 downto 0);-- packahe length
-        Dst_En          : out   std_logic;  -- enables the destination MAC address register
-        Src_En          : out   std_logic;  -- enables the source MAC address register
-        FCS_En          : out   std_logic  -- enables the FCS register
+        	-- Input 
+		Reset           : in    std_logic;  -- reset signal
+		Rx_Clk          : in    std_logic;  -- clock signal for receiving data
+		Rx_Data         : in    std_logic_vector(7 downto 0);  -- incoming data
+		Rx_Valid        : in    std_logic;  -- indicates that the incoming data is valid
+		-- Output
+		Package_Length  : out  std_logic_vector(10 downto 0);
+		Dst_En          : out   std_logic;  -- enables the destination MAC address register
+		Src_En          : out   std_logic;  -- enables the source MAC address register
+		FCS_En          : out   std_logic;  -- enables the FCS register
+		En_Up		: out	std_logic   -- enables the update of the output Destination and source
     );
 end FCS_State_Machine;
 
@@ -69,7 +70,7 @@ begin
     	Dst_En     <= '0';
     	Src_En     <= '0';
     	FCS_En     <= '0';
-
+	    En_Up	   <= '0';
         case current_state is
 
             when IDLE =>
@@ -125,7 +126,9 @@ begin
                 if Counter = (22 + Payload_Length) then
                     FCS_En <= '1';
                 end if;
-
+		if Counter = (25 + Payload_Length) then
+                    En_Up <= '1';
+                end if;
                 if Counter = (25 + Payload_Length) then
                     next_state <= Dummy;
                 end if;

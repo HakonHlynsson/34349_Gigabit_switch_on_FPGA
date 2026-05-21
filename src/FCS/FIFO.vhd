@@ -1,13 +1,11 @@
--- megafunction wizard: %FIFO%
--- GENERATION: STANDARD
--- VERSION: WM1.0
--- MODULE: dcfifo 
-
--- ============================================================
--- File Name: FIFO.vhd
--- Simulation Library Files(s): altera_mf
--- ============================================================
-
+---------------------------------------------------------------------
+-- Componant:   FIFO
+-- Description: buffer the incomming data while it is beaing processed
+--
+--	 
+-- Changes	:
+--  		HH 5/4 creation of document and testing
+---------------------------------------------------------------------
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
@@ -31,7 +29,6 @@ ENTITY FIFO IS
 	);
 END FIFO;
 
-
 ARCHITECTURE SYN OF FIFO IS
 
 	SIGNAL sub_wire0	: STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -39,8 +36,6 @@ ARCHITECTURE SYN OF FIFO IS
 	SIGNAL sub_wire2	: STD_LOGIC_VECTOR (11 DOWNTO 0);
 	SIGNAL sub_wire3	: STD_LOGIC ;
 	SIGNAL sub_wire4	: STD_LOGIC_VECTOR (11 DOWNTO 0);
-
-
 
 	COMPONENT dcfifo
 	GENERIC (
@@ -109,9 +104,6 @@ BEGIN
 		wrfull => sub_wire3,
 		wrusedw => sub_wire4
 	);
-
-
-
 END SYN;
 
 -- ============================================================
