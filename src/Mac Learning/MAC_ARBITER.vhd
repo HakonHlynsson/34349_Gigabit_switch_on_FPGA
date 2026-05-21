@@ -1,3 +1,11 @@
+---------------------------------------------------------------------
+-- Componant:   MAC_ARBITER
+-- Description: is responsible for allocating access to the engine for the ports. 
+--              This is important when MAC addresses arrive at different ports at the same time, 
+--              as the engine is only able the process the MAC addresses of one port at a time.
+-- Made by:    Mikkel Svendsen
+---------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;

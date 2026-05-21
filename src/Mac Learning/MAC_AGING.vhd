@@ -1,3 +1,11 @@
+---------------------------------------------------------------------
+-- Componant:   MAC_AGING
+-- Description: Responsible for slowly going through the BRAM memory and checking whether the saved MAC addresses are actually being used. 
+--              This ensures that MAC addresses that haven't been used for a while can be deleted and make space for new MAC addresses in memory. 
+--              This helps to prevent MAC addresses that are being used getting deleted at random, because of full memory.
+-- Made by:    Mikkel Svendsen
+---------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;

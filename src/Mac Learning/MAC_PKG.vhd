@@ -1,3 +1,9 @@
+---------------------------------------------------------------------
+-- Componant:   MAC_PKG
+-- Description: Contains custom types and functions used in the other parts of the MAC learning module
+-- Made by:    Mikkel Svendsen
+---------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;

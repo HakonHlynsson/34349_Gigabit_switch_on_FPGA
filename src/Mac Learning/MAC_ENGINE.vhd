@@ -1,3 +1,9 @@
+---------------------------------------------------------------------
+-- Componant:   MAC_Engine
+-- Description: Responsible for retrieving and writing mac addresses and their corresponding ports from the BRAM.
+-- Made by:    Mikkel Svendsen
+---------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
